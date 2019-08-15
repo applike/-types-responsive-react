@@ -1,0 +1,93 @@
+import * as React from "react";
+import {
+  getWindowDimension,
+  IdDeviceBreakpointsByWidth,
+  IdMobileHeight
+} from ".";
+import { IWindowDimension } from "./IResponsive";
+
+const { width, height } = getWindowDimension();
+const initialState: IWindowDimension = { width, height };
+
+interface IResponsiveProps {
+  displayIn: Array<string>;
+}
+
+export class Responsive extends React.PureComponent<IResponsiveProps> {
+  public readonly state: IWindowDimension = initialState;
+
+  componentDidMount() {
+    window.addEventListener("resize", this.handleResize, false);
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener("resize", this.handleResize, false);
+  }
+
+  render = () => {
+    const { children, displayIn } = this.props;
+    const { width, height }: IWindowDimension = this.state;
+
+    const dispInArr = displayIn.map((val: string) => val.toLowerCase());
+    const shouldRenderChildren = this.shouldRender(dispInArr, width, height);
+
+    return (
+      <React.Fragment>{shouldRenderChildren ? children : null}</React.Fragment>
+    );
+  };
+
+  handleResize = (): void => {
+    const { width, height } = getWindowDimension();
+    this.setState({ width, height });
+  };
+
+  shouldRender = (
+    display: Array<string>,
+    width: number,
+    height: number
+  ): boolean => {
+    if (
+      display.indexOf("laptop") !== -1 &&
+      width > height &&
+      width >= IdDeviceBreakpointsByWidth.laptop_min
+    ) {
+      //  always landscape
+      return true;
+    }
+
+    if (display.indexOf("tablet") !== -1) {
+      if (
+        width <= IdDeviceBreakpointsByWidth.tablet_max &&
+        width >= IdDeviceBreakpointsByWidth.tablet_min
+      ) {
+        return true;
+      }
+      //  Cater iPad pro portrait (ONLY)
+      if (width === 1024 && height === 1366) {
+        return true;
+      }
+    }
+
+    // For mobile regardless of orientation
+    if (
+      display.indexOf("mobile") !== -1 &&
+      width <= IdDeviceBreakpointsByWidth.mobile_max
+    ) {
+      return true;
+    }
+
+    if (
+      display.indexOf("mobileportrait") !== -1 &&
+      (width <= IdDeviceBreakpointsByWidth.mobile_max &&
+        height >= IdMobileHeight.mobileLandscape_max)
+    ) {
+      return true;
+    }
+
+    return !!(
+      display.indexOf("mobilelandScape") !== -1 &&
+      (width <= IdDeviceBreakpointsByWidth.mobile_max &&
+        height <= IdMobileHeight.mobileLandscape_min)
+    );
+  };
+}
