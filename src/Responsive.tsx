@@ -3,7 +3,7 @@ import {
   getWindowDimension,
   IdDeviceBreakpointsByWidth,
   IdMobileHeight
-} from ".";
+} from "./utilResponsive";
 import { IWindowDimension } from "./IResponsive";
 
 const { width, height } = getWindowDimension();

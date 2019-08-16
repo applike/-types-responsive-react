@@ -1,11 +1,11 @@
 {
-  "name": "@types/responsive-react",
-  "version": "1.0.0",
-  "description": "",
+  "name": "typed-responsive-react",
+  "version": "1.0.1",
+  "description": "Device-type based rendering of react components for typescript projects",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
-    "build": "tsc"
+    "prepublishOnly":"tsc"
   },
   "repository": {
     "type": "git",
@@ -27,16 +27,21 @@
     "screen-size-based-render"
   ],
   "author": "Siddhartha Chowdhury",
-  "license": "ISC",
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/applike/typed-responsive-react/issues"
   },
   "homepage": "https://github.com/applike/typed-responsive-react#readme",
-  "dependencies": {
-    "react": "^16.8.6"
-  },
+  "dependencies": {},
   "devDependencies": {
+    "react": "^16.8.6",
     "@types/react": "^16.8.17",
     "typescript": "^3.4.5"
-  }
+  },
+  "peerDependencies": {
+    "react": "^16.8.6"
+  },
+  "files": [
+    "dist/*"
+  ]
 }
